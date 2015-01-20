@@ -464,7 +464,7 @@ JNIEXPORT void JNICALL Java_li_cil_repack_com_naef_jnlua_LuaState_lua_1dump (JNI
 	if (checkstack(L, JNLUA_MINSTACK)
 			&& checknelems(L, 1)
 			&& (stream.byte_array = newbytearray(env, 1024))) {
-		lua_dump(L, writehandler, &stream);
+		lua_dump(L, writehandler, &stream, 0);
 	}
 	if (stream.bytes) {
 		(*env)->ReleaseByteArrayElements(env, stream.byte_array, stream.bytes, JNI_ABORT);
@@ -547,7 +547,7 @@ JNIEXPORT void JNICALL Java_li_cil_repack_com_naef_jnlua_LuaState_lua_1pushboole
 
 /* lua_pushbytearray() */
 static int pushbytearray_protected (lua_State *L) {
-	lua_pushlstring(L, (jbyte*)lua_touserdata(L, 1), (jsize)lua_tounsigned(L, 2));
+	lua_pushlstring(L, (jbyte*)lua_touserdata(L, 1), (jsize)lua_tointeger(L, 2));
 	return 1;
 }
 JNIEXPORT void JNICALL Java_li_cil_repack_com_naef_jnlua_LuaState_lua_1pushbytearray (JNIEnv *env, jobject obj, jbyteArray ba) {
@@ -559,7 +559,7 @@ JNIEXPORT void JNICALL Java_li_cil_repack_com_naef_jnlua_LuaState_lua_1pushbytea
 		pushbytearray_length = (*env)->GetArrayLength(env, ba);
 		lua_pushcfunction(L, pushbytearray_protected);
 		lua_pushlightuserdata(L, (void*)pushbytearray_b);
-		lua_pushunsigned(L, pushbytearray_length);
+		lua_pushinteger(L, pushbytearray_length);
 		JNLUA_PCALL(L, 2, 1);
 	}
 	if (pushbytearray_b) {
@@ -624,7 +624,7 @@ JNIEXPORT void JNICALL Java_li_cil_repack_com_naef_jnlua_LuaState_lua_1pushnumbe
 
 /* lua_pushstring() */
 static int pushstring_protected (lua_State *L) {
-	lua_pushlstring(L, (const char*)lua_touserdata(L, 1), (jsize)lua_tounsigned(L, 2));
+	lua_pushlstring(L, (const char*)lua_touserdata(L, 1), (jsize)lua_tointeger(L, 2));
 	return 1;
 }
 JNIEXPORT void JNICALL Java_li_cil_repack_com_naef_jnlua_LuaState_lua_1pushstring (JNIEnv *env, jobject obj, jstring s) {
@@ -635,7 +635,7 @@ JNIEXPORT void JNICALL Java_li_cil_repack_com_naef_jnlua_LuaState_lua_1pushstrin
 		jsize pushstring_length = (*env)->GetStringUTFLength(env, s);
 		lua_pushcfunction(L, pushstring_protected);
 		lua_pushlightuserdata(L, (void*)pushstring_s);
-		lua_pushunsigned(L, pushstring_length);
+		lua_pushinteger(L, pushstring_length);
 		JNLUA_PCALL(L, 2, 1);
 	}
 	if (pushstring_s) {
@@ -823,7 +823,7 @@ static int tobytearray_protected (lua_State *L) {
 	size_t tobytearray_length;
 	const char *tobytearray_result = lua_tolstring(L, 1, &tobytearray_length);
 	lua_pushlightuserdata(L, (void*)tobytearray_result);
-	lua_pushunsigned(L, tobytearray_length);
+	lua_pushinteger(L, tobytearray_length);
 	return 2;
 }
 JNIEXPORT jbyteArray JNICALL Java_li_cil_repack_com_naef_jnlua_LuaState_lua_1tobytearray (JNIEnv *env, jobject obj, jint index) {
@@ -839,7 +839,7 @@ JNIEXPORT jbyteArray JNICALL Java_li_cil_repack_com_naef_jnlua_LuaState_lua_1tob
 		lua_pushvalue(L, index);
 		JNLUA_PCALL(L, 1, 2);
 		tobytearray_result = (const char*)lua_touserdata(L, -2);
-		tobytearray_length = lua_tounsigned(L, -1);
+		tobytearray_length = (lua_Unsigned)lua_tointeger(L, -1);
 		lua_pop(L, 2);
 	}
 	if (!tobytearray_result) {
