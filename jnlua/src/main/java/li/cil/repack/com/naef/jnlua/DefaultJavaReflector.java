@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: DefaultJavaReflector.java 173 2013-07-28 20:46:07Z andre@naef.com $
  * See LICENSE.txt for license terms.
  */
 
@@ -436,7 +436,7 @@ public class DefaultJavaReflector implements JavaReflector {
 					throw new LuaRuntimeException(
 							String.format(
 									"attempt to write array of %s at index %d with %s value",
-									componentType.getCanonicalName(), index,
+									componentType.getCanonicalName(),
 									luaState.typeName(3)));
 				}
 				Object value = luaState.toJavaObject(3, componentType);

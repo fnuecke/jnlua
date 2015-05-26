@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: DefaultConverter.java 161 2012-10-06 13:53:02Z andre@naef.com $
  * See LICENSE.txt for license terms.
  */
 
@@ -23,14 +23,23 @@ public class DefaultConverter implements Converter {
 	/**
 	 * Raw byte array.
 	 */
-	private static final boolean RAW_BYTE_ARRAY = Boolean.parseBoolean(System
+	private static final boolean RAW_BYTE_ARRAY = false; /* Boolean.parseBoolean(System
 			.getProperty(DefaultConverter.class.getPackage().getName()
-					+ ".rawByteArray"));
+					+ ".rawByteArray")); */
+
+	/**
+	 * UTF-8 charset.
+	 */
+	private static final java.nio.charset.Charset UTF8 = java.nio.charset.Charset.forName("UTF-8");
 
 	/**
 	 * Static instance.
 	 */
 	private static final DefaultConverter INSTANCE = new DefaultConverter();
+
+  public static boolean isTypeSupported(Class<?> clazz) {
+    return JAVA_OBJECT_CONVERTERS.get(clazz) != null;
+  }
 
 	/**
 	 * Boolean distance map.
@@ -427,7 +436,12 @@ public class DefaultConverter implements Converter {
 				return (T) luaValueConverter.convert(luaState, index);
 			}
 			if (formalType == Object.class) {
-				return (T) luaState.toString(index);
+				final byte[] result = luaState.toByteArray(index);
+				final String string = new String(result, UTF8);
+				if (string.getBytes(UTF8).length != result.length)
+					return (T) result;
+				else
+					return (T) string;
 			}
 			break;
 		case TABLE:

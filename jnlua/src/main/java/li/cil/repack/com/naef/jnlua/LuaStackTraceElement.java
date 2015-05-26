@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: LuaStackTraceElement.java 39 2012-01-04 23:48:16Z andre@naef.com $
  * See LICENSE.txt for license terms.
  */
 

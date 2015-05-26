@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: JavaModule.java 76 2012-01-06 01:25:52Z andre@naef.com $
  * See LICENSE.txt for license terms.
  */
 
