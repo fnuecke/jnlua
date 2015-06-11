@@ -424,7 +424,7 @@ static int openlib_protected (lua_State *L) {
 JNIEXPORT void JNICALL Java_li_cil_repack_com_naef_jnlua_LuaStateFiveThree_lua_1openlib (JNIEnv *env, jobject obj, jint lib) {
 	lua_State *L = getluathread(env, obj);
 	if (checkstack(L, JNLUA_MINSTACK)
-			&& checkarg(lib >= 0 && lib <= 10, "illegal library")) {
+			&& checkarg(lib >= 0 && lib <= 11, "illegal library")) {
 		lua_pushcfunction(L, openlib_protected);
 		lua_pushinteger(L, lib);
 		JNLUA_PCALL(L, 1, 1);
