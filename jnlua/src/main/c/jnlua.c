@@ -411,6 +411,10 @@ static int openlib_protected (lua_State *L) {
 		libname = LUA_ERISLIBNAME;
 		openfunc = luaopen_eris;
 		break;
+	case 11:
+		libname = LUA_UTF8LIBNAME;
+		openfunc = luaopen_utf8;
+		break;
 	default:
 		return 0;
 	}
